@@ -6,15 +6,15 @@ db.pragma("foreign_keys = ON");
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS alunos (
-        id_aluno INTERGER PRIMARY KEY AUTOINCREMENT,
+        id_aluno INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         idade INTEGER NOT NULL,
         serie TEXT NOT NULL,
         ra TEXT NOT NULL UNIQUE
     );  
     CREATE TABLE IF NOT EXISTS notas(
-        id_nota INTERGER PRIMARY KEY AUTOINCREMENT,
-        id_aluno INTERGER NOT NULL UNIQUE,
+        id_nota INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_aluno INTEGER NOT NULL UNIQUE,
         t1 REAL NOT NULL,
         t2 REAL NOT NULL,
         n1 REAL NOT NULL,

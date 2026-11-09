@@ -1,8 +1,7 @@
-import PrincipalPage from "./principal/page";
+import LoginPage from "./login/page";
 
 export default function Home() {
   return (
-    <PrincipalPage />
-
-  )
-} 
+    <LoginPage />
+  );
+}

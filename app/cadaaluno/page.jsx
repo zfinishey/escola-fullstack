@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Header from "../components/header";
 import styles from "./cadaaluno.module.css";
+import {redirect} from "next/navigation";
 
 export default function CadaAluno() {
     const [nome, setNome] = useState('');
@@ -9,10 +10,32 @@ export default function CadaAluno() {
     const [ra, setRa] = useState('');
     const [turma, setTurma] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        alert(`Aluno ${nome} cadastrado com sucesso!`);
-    };
+    async function cadastrarAluno(evento) {
+        evento.preventDefault();
+
+        const resposta = await fetch("/api/alunos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nome,
+                idade: dataNasc,
+                serie: turma,
+                ra
+            }),
+        });
+        const dados = await resposta.json();
+        alert(dados.mensagem || dados.erro);
+        if(resposta.ok){
+            setNome("")
+            setDataNasc("")
+            setTurma("")
+            setRa("")
+            redirect('/listaluno')
+        }
+    }
+
 
     return (
         <>
@@ -27,7 +50,7 @@ export default function CadaAluno() {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className={styles.form}>
+                    <form onSubmit={cadastrarAluno} className={styles.form}>
                         <div className={styles.formGrid}>
                             <div className={styles.inputGroup}>
                                 <label htmlFor="nome" className={styles.label}>Nome Completo</label>
@@ -87,4 +110,6 @@ export default function CadaAluno() {
             </main>
         </>
     );
+
 }
+

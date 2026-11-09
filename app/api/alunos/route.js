@@ -1,11 +1,17 @@
 import db from "../../db/banco";
 import { NextResponse } from "next/server";
 
-export async function listAlunos() {
-    const alunos = db.prepare("SELECT * FROM alunos ORDER BY nome").all();
-    return NextResponse.json(alunos);
+export async function GET() {
+    try {
+        const alunos = db.prepare("SELECT * FROM alunos ORDER BY nome").all();
+        return NextResponse.json(alunos);
+    } catch (error) {
+        console.error("Erro ao buscar alunos!", error);
+        return NextResponse.json({ erro: "Erro ao buscar alunos!" }, { status: 500 });
+    }
 }
-export async function SalvaAlunos(request) {
+
+export async function POST(request) {
     try {
         const dados = await request.json();
         const sql = db.prepare(`INSERT INTO alunos (nome, idade, serie, ra) VALUES (?,?,?,?)`);
@@ -14,10 +20,11 @@ export async function SalvaAlunos(request) {
 
     } catch (error) {
         console.error("Erro ao cadastrar aluno!", error);
+        return NextResponse.json({ erro: "Erro ao cadastrar aluno!" }, { status: 500 });
     }
 }
 
-export async function editAlunos(request) {
+export async function PUT(request) {
     try {
         const dados = await request.json();
         const sql = db.prepare(`UPDATE alunos SET nome = ?, idade = ?, serie = ?, ra = ? WHERE id_aluno = ?`);
@@ -26,9 +33,11 @@ export async function editAlunos(request) {
 
     } catch (error) {
         console.error("Erro ao editar aluno!", error);
+        return NextResponse.json({ erro: "Erro ao editar aluno!" }, { status: 500 });
     }
 }
-export async function excluiAlunos(request) {
+
+export async function DELETE(request) {
     try {
         const dados = await request.json();
         const sql = db.prepare(`DELETE FROM alunos WHERE id_aluno = ?`);
@@ -37,5 +46,6 @@ export async function excluiAlunos(request) {
 
     } catch (error) {
         console.error("Erro ao excluir aluno!", error);
+        return NextResponse.json({ erro: "Erro ao excluir aluno!" }, { status: 500 });
     }
 }
